@@ -229,9 +229,9 @@ async function main() {
     if (gasReport?.status === "failed") log(`${stamp()} ${yellow("gas report failed:")} ${gasReport.error ?? "unknown error"} ${dim("(audit results above are unaffected)")}`);
     if (!args.json && gasReport?.status === "done" && gasReport.totals?.split) {
       log("");
-      log(bold("Gas (per call, receipt-calibrated)"));
-      log(`  L2 execution  ${green(formatMnt(gasReport.totals.split.l2WeiPerCall ?? "0"))}`);
-      log(`  DA            ${green(formatMnt(gasReport.totals.split.l1DaWeiPerCall ?? "0"))} ${dim("— priced from Mantle receipt ground truth (l1Fee)")}`);
+      log(bold("Identified savings (per call, receipt-calibrated)"));
+      log(`  L2 execution  ${green(formatMnt(gasReport.totals.split.l2WeiPerCall ?? "0"))} ${dim(`(${Number(gasReport.totals.l2GasSavedPerCall ?? 0).toLocaleString()} gas)`)}`);
+      log(`  DA            ${green(formatMnt(gasReport.totals.split.l1DaWeiPerCall ?? "0"))} ${dim("— DA priced from Mantle receipt ground truth (l1Fee)")}`);
       log(`  Opportunities ${gas.optimizations.length} ${dim(`· ${args.api}/app/gas/${gasReport.id}`)}`);
     }
   }
