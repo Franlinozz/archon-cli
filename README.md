@@ -3,11 +3,11 @@
 Archon audits for Mantle, from your terminal or CI. Zero dependencies, Node ≥ 18.
 
 ```bash
-# Scan a deployed, verified Mantle contract — works from any directory, no local files:
+# Scan a deployed, verified Mantle contract — works from ANY directory, no local files:
 npx --yes github:Franlinozz/archon-cli scan 0xe7043e2ec95eF357FbBa3359BA2f1edb10cEAD2a --gas --fail-on high
 
-# Or scan local Solidity from a repo checkout (a .sol file or a directory of them):
-npx --yes github:Franlinozz/archon-cli scan contracts/VaultV2.sol --fail-on high
+# Scan your own Solidity — run from your project root; a .sol file or a folder (bundled):
+npx --yes github:Franlinozz/archon-cli scan ./contracts --fail-on high
 ```
 
 - Submits the scan to Archon's public API and streams stage progress.
