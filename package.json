@@ -1,6 +1,6 @@
 {
   "name": "archon-scan",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI for Archon — read-only smart-contract audits and receipt-calibrated gas intelligence for Mantle, from your terminal or CI.",
   "type": "module",
   "bin": { "archon-scan": "./bin/archon-scan.mjs" },

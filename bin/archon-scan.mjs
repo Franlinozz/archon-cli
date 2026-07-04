@@ -11,7 +11,7 @@
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { basename, extname, join, relative, resolve } from "node:path";
 
-const VERSION = "0.1.0";
+const VERSION = "0.1.1";
 const SEVERITIES = ["critical", "high", "medium", "low", "info"];
 const DEPTHS = ["quick", "deep", "gas-cost", "full-report"];
 const PROTOCOLS = ["mETH", "cmETH", "USDY", "Aave V3", "Merchant Moe", "Agni"];
@@ -43,9 +43,9 @@ Options:
 Exit codes: 0 ok · 1 operational error · 2 --fail-on threshold breached
 
 Examples:
-  archon-scan scan contracts/Vault.sol --fail-on high
-  archon-scan scan ./src --gas --json > archon.json
-  archon-scan scan 0xe7043e2ec95eF357FbBa3359BA2f1edb10cEAD2a --depth deep`;
+  archon-scan scan 0xe7043e2ec95eF357FbBa3359BA2f1edb10cEAD2a --fail-on high   # deployed Mantle contract — no local files needed
+  archon-scan scan contracts/VaultV2.sol --gas                                 # a local .sol file
+  archon-scan scan ./src --json > archon.json                                  # a directory bundle`;
 
 function fail(message) { console.error(red(`error: ${message}`)); process.exit(1); }
 
@@ -90,7 +90,12 @@ function buildSource(target) {
   if (/^0x[0-9a-fA-F]{40}$/.test(target)) return { sourceKind: "address", sourceRef: target, display: target };
   const path = resolve(target);
   let stats;
-  try { stats = statSync(path); } catch { fail(`${target} is not a file, directory, or 0x address`); }
+  try { stats = statSync(path); } catch {
+    fail(`"${target}" is not a file, directory, or 0x address (looked under ${process.cwd()}).\n` +
+      `       Pass a path to a .sol file, a folder of .sol files, or a deployed Mantle address.\n` +
+      `       No local checkout? Scan a deployed contract from anywhere, e.g.:\n` +
+      `         archon-scan scan 0xe7043e2ec95eF357FbBa3359BA2f1edb10cEAD2a --fail-on high`);
+  }
   if (stats.isFile()) {
     const source = readFileSync(path, "utf8");
     return { sourceKind: "paste", sourceCode: source, label: basename(path, ".sol"), display: basename(path) };
